@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
-from matplotlib.patches import FancyBboxPatch
+from matplotlib.patches import FancyBboxPatch, Circle
 from functools import reduce
 import pandas as pd
 
@@ -101,3 +101,33 @@ def marimekko(data: list | dict | pd.Series,
     if title != '': plt.title(title)
     return fig
 
+def factors_graph(data):
+    mapping = {
+        0.0: 'NA',
+        1.0: 'Low',
+        3.0: 'Medium-Low',
+        5.0: 'Medium',
+        7.5: 'Medium-High',
+        10.0: 'High' 
+    }
+
+    colors = {
+        0.0: (217/255, 217/255, 217/255),
+        1.0: (0/255, 153/255, 51/255),
+        3.0: (204/255, 255/255, 102/255),
+        5.0: (230/255, 230/255, 0/255),
+        7.5: (230/255, 92/255, 0/255),
+        10.0: (204/255, 0/255, 0/255) 
+    }
+
+    fig, ax = plt.subplots(figsize=figsize)
+
+    length = len(data)
+    keys = list(data.keys())
+    plt.axis('off')
+
+    for i in range(length):
+        pos = (.05, (length-(i+.5))/length)
+        ax.text(pos[0], pos[1], keys[i], va='center', ha='center')
+        ax.add_patch(Circle((pos[0]+.1, pos[1]), radius=.02, color=colors[data[keys[i]]]))
+    return fig
